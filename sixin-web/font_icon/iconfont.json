@@ -1,0 +1,37 @@
+{
+  "id": "1978089",
+  "name": "sixin",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "8361898",
+      "name": "聊天3",
+      "font_class": "liaotian1",
+      "unicode": "e6db",
+      "unicode_decimal": 59099
+    },
+    {
+      "icon_id": "454758",
+      "name": "我的 focus",
+      "font_class": "04f",
+      "unicode": "e60b",
+      "unicode_decimal": 58891
+    },
+    {
+      "icon_id": "1012088",
+      "name": "通讯录",
+      "font_class": "addressbook",
+      "unicode": "e605",
+      "unicode_decimal": 58885
+    },
+    {
+      "icon_id": "9626986",
+      "name": "指南针",
+      "font_class": "zhinanzhen",
+      "unicode": "e88c",
+      "unicode_decimal": 59532
+    }
+  ]
+}

@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <title></title>
+    <script src="js/mui.min.js"></script>
+    <link href="css/mui.min.css" rel="stylesheet"/>
+	<link rel="stylesheet" type="text/css" href="css/header.css"/>
+	<link rel="stylesheet" type="text/css" href="font_icon/iconfont.css"/>
+    <script type="text/javascript" charset="utf-8">
+      	mui.init();
+		
+		mui.plusReady(function () {
+			plus.navigator.setStatusBarStyle("light");
+		    plus.navigator.setStatusBarBackground("#C9394A");
+		})
+    </script>
+</head>
+<body>
+	<header class="mui-bar mui-bar-nav title">
+		<h1 class="mui-title title-color" id="sixin_title"><b>私信</b></h1>
+	</header>
+	
+	<nav class="mui-bar mui-bar-tab">
+		<a class="mui-tab-item mui-active" tabIndex="0">
+			<span class="mui-icon iconfont icon-liaotian1"></span>
+			<span class="mui-tab-label">私信</span>
+		</a>
+		<a class="mui-tab-item" tabIndex="1">
+			<span class="mui-icon iconfont icon-addressbook"></span>
+			<span class="mui-tab-label">通讯录</span>
+		</a>
+		<a class="mui-tab-item" tabIndex="2">
+			<span class="mui-icon iconfont icon-zhinanzhen"></span>
+			<span class="mui-tab-label">发现</span>
+		</a>
+		<a class="mui-tab-item" tabIndex="3">
+			<span class="mui-icon iconfont icon-04f"></span>
+			<span class="mui-tab-label">我</span>
+		</a>
+	</nav>
+	
+	<script type="text/javascript">
+		var sixinArray = [
+			{
+				pageId: "sixin_chatlist.html",
+				pageUrl: "sixin_chatlist.html"
+			},
+			{
+				pageId: "sixin_contact.html",
+				pageUrl: "sixin_contact.html"
+			},
+			{
+				pageId: "sixin_discover.html",
+				pageUrl: "sixin_discover.html"
+			},
+			{
+				pageId: "sixin_me.html",
+				pageUrl: "sixin_me.html"
+			}
+		];
+		
+		var sixinStyle = {
+			top: "44px",
+			bottom: "50px"
+		}
+		
+		mui.plusReady(function () {
+			//禁止返回到登录注册页面
+			mui.back = function(){
+				return false;
+			}
+			
+			//对网络连接进行事件监听
+			netChangeSwitch();
+			
+			//获取当前webview对象
+		    var indexWebView = plus.webview.currentWebview();
+			//向当前的主页webview追加子页的四张webview对象
+			for(var i=0;i<sixinArray.length;i++){
+				var sixinPage = plus.webview.create(sixinArray[i].pageUrl,sixinArray[i].pageId,sixinStyle);
+				//隐藏webview窗口
+				sixinPage.hide();
+				//追加每一个子页面到当前的主页面
+				indexWebView.append(sixinPage);
+			}
+			plus.webview.show(sixinArray[0].pageId);
+			
+			//批量绑定tap事件，展示不同的页面
+			mui(".mui-bar-tab").on("tap","a",function(){
+				var tabIndex = this.getAttribute("tabIndex");
+				//隐藏不需要的页面，显示点击的tab选项所对应的页面
+				for(var i=0;i<sixinArray.length;i++){
+					if(i != tabIndex){
+						plus.webview.hide(sixinArray[i].pageId,"fade-out",200);
+					}else{
+						plus.webview.show(sixinArray[tabIndex].pageId,"fade-in",200);
+					}
+				}
+			});
+			setTimeout("initData()",1000);
+		});
+		
+		//监听网络状态更改
+		function netChangeSwitch(){
+			document.addEventListener("netchange",function(){
+				//网络状态获取和判断
+				var connectionStatus = plus.networkinfo.getCurrentType();
+				if (connectionStatus != 0 && connectionStatus != 1) {
+					var sixin_title = document.getElementById("sixin_title");
+					sixin_title.innerHTML = "<b>私信</b>"
+					return;
+				}else{
+					var sixin_title = document.getElementById("sixin_title");
+					sixin_title.innerHTML = "<b>私信<span style='font-size: 12px;'>【已离线】</span></b>"
+				}
+			})
+		}
+		//预加载
+		function initData(){
+			var sixin_chatlist = plus.webview.getWebviewById("sixin_chatlist.html");
+			mui.fire(sixin_chatlist,"refresh");
+			var sixin_me = plus.webview.getWebviewById("sixin_me.html");
+			mui.fire(sixin_me,"refresh");
+		}
+	</script>
+</body>
+</html>
